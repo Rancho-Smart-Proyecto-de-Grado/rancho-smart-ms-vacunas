@@ -15,7 +15,7 @@ public class Vacuna {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idVacuna;
 
     @Column(name = "ID_HISTORIAL_MEDICO", nullable = false)
     private Long idHistorialMedico;
@@ -38,12 +38,26 @@ public class Vacuna {
     @Column(name = "FECHA_PROXIMA_DOSIS")
     private LocalDate fechaProximaDosis;
 
-    public Long getId() {
-        return id;
+    public Vacuna(Long idHistorialMedico, Long idTratamiento, String nombre, int cantidadDosis,
+            boolean vacunacionCompletada, LocalDate fechaAdministracion, LocalDate fechaProximaDosis) {
+        this.idHistorialMedico = idHistorialMedico;
+        this.idTratamiento = idTratamiento;
+        this.nombre = nombre;
+        this.cantidadDosis = cantidadDosis;
+        this.vacunacionCompletada = vacunacionCompletada;
+        this.fechaAdministracion = fechaAdministracion;
+        this.fechaProximaDosis = fechaProximaDosis;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Vacuna() {
+    }
+
+    public Long getIdVacuna() {
+        return idVacuna;
+    }
+
+    public void setIdVacuna(Long idVacuna) {
+        this.idVacuna = idVacuna;
     }
 
     public Long getIdHistorialMedico() {
@@ -101,18 +115,4 @@ public class Vacuna {
     public void setFechaProximaDosis(LocalDate fechaProximaDosis) {
         this.fechaProximaDosis = fechaProximaDosis;
     }
-
-    public Vacuna() {
-    }
-
-    public Vacuna(Long idHistorialMedico, Long idTratamiento, String nombre, int cantidadDosis,
-            boolean vacunacionCompletada, LocalDate fechaAdministracion, LocalDate fechaProximaDosis) {
-        this.idHistorialMedico = idHistorialMedico;
-        this.idTratamiento = idTratamiento;
-        this.nombre = nombre;
-        this.cantidadDosis = cantidadDosis;
-        this.vacunacionCompletada = vacunacionCompletada;
-        this.fechaAdministracion = fechaAdministracion;
-        this.fechaProximaDosis = fechaProximaDosis;
-    }   
 }
