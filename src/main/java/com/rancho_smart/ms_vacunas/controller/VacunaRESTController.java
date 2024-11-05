@@ -1,8 +1,9 @@
 package com.rancho_smart.ms_vacunas.controller;
-
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,35 +25,42 @@ public class VacunaRESTController {
     private VacunaService vacunaService;
 
     @GetMapping
-    public List<Vacuna> getAllVacunas() {
-        return vacunaService.getAllVacunas();
+    public ResponseEntity<List<Vacuna>> getVacunas() {
+        List<Vacuna> listado = vacunaService.getVacunas();
+        return new ResponseEntity<>(listado, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vacuna> getVacunaById(@PathVariable Long id) {
-        return vacunaService.getVacunaById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Vacuna> getVacuna(@PathVariable Long id) {
+        Optional<Vacuna> vacuna = vacunaService.getVacuna(id);
+        return vacuna.map(ResponseEntity::ok)
+                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public Vacuna createVacuna(@RequestBody Vacuna vacuna) {
-        return vacunaService.createVacuna(vacuna);
+    public ResponseEntity<Vacuna> saveVacuna(@RequestBody Vacuna vacuna) {
+        Vacuna vacunaCreada = vacunaService.saveVacuna(vacuna);
+        return new ResponseEntity<>(vacunaCreada, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vacuna> updateVacuna(@PathVariable Long id, @RequestBody Vacuna vacunaDetails) {
-        return vacunaService.updateVacuna(id, vacunaDetails)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Vacuna> updateVacuna(@PathVariable Long id, @RequestBody Vacuna vacuna) {
+        if (!vacunaService.getVacuna(id).isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            vacuna.setIdVacuna(id);
+            Vacuna vacunaActualizada = vacunaService.saveVacuna(vacuna);
+            return new ResponseEntity<>(vacunaActualizada, HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVacuna(@PathVariable Long id) {
-        if (vacunaService.deleteVacuna(id)) {
-            return ResponseEntity.ok().build();
+        if (!vacunaService.getVacuna(id).isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return ResponseEntity.notFound().build();
+            vacunaService.deleteVacuna(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 }

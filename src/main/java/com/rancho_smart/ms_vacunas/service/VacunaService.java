@@ -15,15 +15,15 @@ public class VacunaService {
     @Autowired
     private VacunaRepository vacunaRepository;
 
-    public List<Vacuna> getAllVacunas() {
+    public List<Vacuna> getVacunas() {
         return vacunaRepository.findAll();
     }
 
-    public Optional<Vacuna> getVacunaById(Long id) {
+    public Optional<Vacuna> getVacuna(Long id) {
         return vacunaRepository.findById(id);
     }
 
-    public Vacuna createVacuna(Vacuna vacuna) {
+    public Vacuna saveVacuna(Vacuna vacuna) {
         return vacunaRepository.save(vacuna);
     }
 
