@@ -37,6 +37,18 @@ public class VacunaRESTController {
                      .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/tratamiento/{idTratamiento}")
+    public ResponseEntity<List<Vacuna>> getVacunasByIdTratamiento(@PathVariable Long idTratamiento){
+        List<Vacuna> vacunasTratamiento = this.vacunaService.getVacunasByIdTratamiento(idTratamiento);
+        return new ResponseEntity<>(vacunasTratamiento, HttpStatus.OK);
+    }
+
+    @GetMapping("/historial/{idHistorialMedico}")
+    public ResponseEntity<List<Vacuna>> getVacunasByIdHistorial(@PathVariable Long idHistorialMedico){
+        List<Vacuna> vacunasHistorial = this.vacunaService.getVacunasByIdHistorial(idHistorialMedico);
+        return new ResponseEntity<>(vacunasHistorial, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Vacuna> saveVacuna(@RequestBody Vacuna vacuna) {
         Vacuna vacunaCreada = vacunaService.saveVacuna(vacuna);

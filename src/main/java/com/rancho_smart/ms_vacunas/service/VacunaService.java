@@ -2,6 +2,7 @@ package com.rancho_smart.ms_vacunas.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,18 @@ public class VacunaService {
 
     public List<Vacuna> getVacunas() {
         return vacunaRepository.findAll();
+    }
+
+    public List<Vacuna> getVacunasByIdTratamiento(Long idTratamiento) {
+        List<Vacuna> vacunasTratamiento = this.vacunaRepository.findByIdTratamiento(idTratamiento);
+        return vacunasTratamiento;
+    }
+
+    public List<Vacuna> getVacunasByIdHistorial(Long idHistorialMedico) {
+        List<Vacuna> vacunasHistorial = this.vacunaRepository.findByIdHistorialMedico(idHistorialMedico);
+        return vacunasHistorial.stream()
+                .filter(vacuna -> vacuna.getIdTratamiento() == null)
+                .collect(Collectors.toList());
     }
 
     public Optional<Vacuna> getVacuna(Long id) {
